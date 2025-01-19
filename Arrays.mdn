@@ -1,0 +1,276 @@
+1. Array Rotation
+Problem:
+Rotate an array to the left or right by a given number of positions.
+
+Code (Left Rotation):
+java
+Copy
+Edit
+public class Solution {
+    public void rotateLeft(int[] arr, int k) {
+        int n = arr.length;
+        k = k % n;  // Handle case when k is larger than the array size
+        reverse(arr, 0, k - 1);
+        reverse(arr, k, n - 1);
+        reverse(arr, 0, n - 1);
+    }
+
+    private void reverse(int[] arr, int start, int end) {
+        while (start < end) {
+            int temp = arr[start];
+            arr[start] = arr[end];
+            arr[end] = temp;
+            start++;
+            end--;
+        }
+    }
+}
+Explanation:
+Reverse the first k elements of the array.
+Reverse the remaining elements.
+Reverse the entire array to get the final rotated array.
+2. Array Merging and Sorting
+Problem:
+Merge two sorted arrays or sort an unsorted array.
+
+Code (Merging Two Sorted Arrays):
+java
+Copy
+Edit
+public class Solution {
+    public int[] merge(int[] arr1, int[] arr2) {
+        int n = arr1.length, m = arr2.length;
+        int[] result = new int[n + m];
+        int i = 0, j = 0, k = 0;
+        while (i < n && j < m) {
+            if (arr1[i] < arr2[j]) {
+                result[k++] = arr1[i++];
+            } else {
+                result[k++] = arr2[j++];
+            }
+        }
+        while (i < n) result[k++] = arr1[i++];
+        while (j < m) result[k++] = arr2[j++];
+        return result;
+    }
+}
+Explanation:
+Use two pointers to traverse both arrays.
+Compare elements from both arrays and place the smaller element in the result array.
+Once one array is exhausted, copy the remaining elements from the other array.
+3. Two Pointer Technique
+Problem:
+Solve problems like finding pairs with a given sum or finding the longest subarray with certain conditions.
+
+Code (Finding Pair with Given Sum):
+java
+Copy
+Edit
+import java.util.Arrays;
+
+public class Solution {
+    public boolean hasPairWithSum(int[] arr, int target) {
+        Arrays.sort(arr);
+        int left = 0, right = arr.length - 1;
+        while (left < right) {
+            int sum = arr[left] + arr[right];
+            if (sum == target) return true;
+            if (sum < target) left++;
+            else right--;
+        }
+        return false;
+    }
+}
+Explanation:
+Sort the array.
+Use two pointers, one at the start and one at the end, to find pairs that sum up to the target.
+Adjust the pointers based on the sum.
+4. Binary Search in Sorted Arrays
+Problem:
+Find an element in a sorted array or find the position of an element using binary search.
+
+Code (Binary Search):
+java
+Copy
+Edit
+public class Solution {
+    public int binarySearch(int[] arr, int target) {
+        int left = 0, right = arr.length - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (arr[mid] == target) return mid;
+            else if (arr[mid] < target) left = mid + 1;
+            else right = mid - 1;
+        }
+        return -1;
+    }
+}
+Explanation:
+Start with two pointers, left and right, and calculate the middle index.
+If the middle element matches the target, return its index.
+If the target is smaller, move the right pointer to the left; otherwise, move the left pointer to the right.
+5. Prefix and Suffix Arrays for Range Queries
+Problem:
+Answer range queries efficiently, such as sum or product over a range.
+
+Code (Prefix Sum):
+java
+Copy
+Edit
+public class Solution {
+    public int[] prefixSum(int[] arr) {
+        int n = arr.length;
+        int[] prefix = new int[n];
+        prefix[0] = arr[0];
+        for (int i = 1; i < n; i++) {
+            prefix[i] = prefix[i - 1] + arr[i];
+        }
+        return prefix;
+    }
+}
+Explanation:
+Create a prefix sum array where each element at index i contains the sum of elements from index 0 to i.
+This allows us to compute the sum of any subarray in constant time.
+6. Kadane's Algorithm for Maximum Subarray Sum
+Problem:
+Find the subarray with the maximum sum in an array.
+
+Code (Kadane's Algorithm):
+java
+Copy
+Edit
+public class Solution {
+    public int maxSubArray(int[] nums) {
+        int maxSum = nums[0], currentSum = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            currentSum = Math.max(nums[i], currentSum + nums[i]);
+            maxSum = Math.max(maxSum, currentSum);
+        }
+        return maxSum;
+    }
+}
+Explanation:
+Track the maximum sum subarray that ends at each index.
+Update the current sum and the maximum sum encountered so far.
+7. Partitioning Arrays (Quickselect)
+Problem:
+Partition an array around a pivot element (like in quicksort).
+
+Code (Quickselect):
+java
+Copy
+Edit
+public class Solution {
+    public int quickselect(int[] arr, int left, int right, int k) {
+        if (left == right) return arr[left];
+        int pivotIndex = partition(arr, left, right);
+        if (k == pivotIndex) return arr[k];
+        else if (k < pivotIndex) return quickselect(arr, left, pivotIndex - 1, k);
+        else return quickselect(arr, pivotIndex + 1, right, k);
+    }
+
+    private int partition(int[] arr, int left, int right) {
+        int pivot = arr[right], i = left;
+        for (int j = left; j < right; j++) {
+            if (arr[j] <= pivot) {
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+                i++;
+            }
+        }
+        arr[right] = arr[i];
+        arr[i] = pivot;
+        return i;
+    }
+}
+Explanation:
+Use the partitioning logic from quicksort to divide the array.
+Recursively select the kth smallest element.
+8. Finding Duplicates in Arrays
+Problem:
+Find duplicate elements in an array.
+
+Code (Finding Duplicates):
+java
+Copy
+Edit
+import java.util.HashSet;
+
+public class Solution {
+    public boolean containsDuplicate(int[] nums) {
+        Set<Integer> set = new HashSet<>();
+        for (int num : nums) {
+            if (!set.add(num)) return true;
+        }
+        return false;
+    }
+}
+Explanation:
+Use a hash set to track elements as you iterate through the array.
+If an element is already in the set, it’s a duplicate.
+9. Maximum Product Subarray
+Problem:
+Find the subarray that has the maximum product.
+
+Code (Maximum Product Subarray):
+java
+Copy
+Edit
+public class Solution {
+    public int maxProduct(int[] nums) {
+        int maxProd = nums[0], minProd = nums[0], result = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] < 0) {
+                int temp = maxProd;
+                maxProd = minProd;
+                minProd = temp;
+            }
+            maxProd = Math.max(nums[i], maxProd * nums[i]);
+            minProd = Math.min(nums[i], minProd * nums[i]);
+            result = Math.max(result, maxProd);
+        }
+        return result;
+    }
+}
+Explanation:
+Track both the maximum and minimum product up to each index.
+Update the result with the maximum product encountered.
+10. Median of Two Sorted Arrays
+Problem:
+Find the median of two sorted arrays.
+
+Code (Median of Two Sorted Arrays):
+java
+Copy
+Edit
+public class Solution {
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        if (nums1.length > nums2.length) return findMedianSortedArrays(nums2, nums1);
+        int m = nums1.length, n = nums2.length;
+        int left = 0, right = m;
+        while (left <= right) {
+            int partition1 = (left + right) / 2;
+            int partition2 = (m + n + 1) / 2 - partition1;
+            int maxLeft1 = (partition1 == 0) ? Integer.MIN_VALUE : nums1[partition1 - 1];
+            int minRight1 = (partition1 == m) ? Integer.MAX_VALUE : nums1[partition1];
+            int maxLeft2 = (partition2 == 0) ? Integer.MIN_VALUE : nums2[partition2 - 1];
+            int minRight2 = (partition2 == n) ? Integer.MAX_VALUE : nums2[partition2];
+            if (maxLeft1 <= minRight2 && maxLeft2 <= minRight1) {
+                if ((m + n) % 2 == 0) {
+                    return (Math.max(maxLeft1, maxLeft2) + Math.min(minRight1, minRight2)) / 2.0;
+                } else {
+                    return Math.max(maxLeft1, maxLeft2);
+                }
+            } else if (maxLeft1 > minRight2) {
+                right = partition1 - 1;
+            } else {
+                left = partition1 + 1;
+            }
+        }
+        throw new IllegalArgumentException("Input arrays are not sorted");
+    }
+}
+Explanation:
+Use binary search on the smaller array to find the correct partition.
+Ensure the elements on the left are less than or equal to the elements on the right for both arrays.
